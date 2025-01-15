@@ -1,0 +1,88 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Visual Comparison Report - Desktop</title>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.5; margin: 20px; }
+        h1, h2 { text-align: center; }
+        .summary { text-align: center; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .pass { color: green; font-weight: bold; }
+        .fail { color: red; font-weight: bold; }
+        .error { color: orange; font-weight: bold; }
+        img { max-width: 150px; cursor: pointer; }
+        #modal {
+          display: none;
+          position: fixed;
+          z-index: 1000;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0, 0, 0, 0.8);
+        }
+        #modal img {
+          display: block;
+          margin: 50px auto;
+          max-width: 80%;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Visual Comparison Report</h1>
+      <h2>Device: Desktop</h2>
+      <div class="summary">
+        <p>Total Pages Tested: 1</p>
+        <p>Passed: 0</p>
+        <p>Failed: 1</p>
+        <p>Errors: 0</p>
+        <p>Last Run: 1/15/2025, 8:35:14 AM</p>
+        <p>Environments Tested: 
+    <a href="https://live-web-tamiu.pantheonsite.io/" target="_blank">Staging: https://live-web-tamiu.pantheonsite.io/</a>,
+    <a href="https://online.tamiu.edu/" target="_blank">Prod: https://online.tamiu.edu/</a>
+  </p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th>Similarity</th>
+            <th>Status</th>
+            <th>Thumbnail</th>
+          </tr>
+        </thead>
+        <tbody>
+  
+      <tr>
+        <td>
+          <a href="https://live-web-tamiu.pantheonsite.io//" target="_blank">Staging</a> |
+          <a href="https://online.tamiu.edu//" target="_blank">Prod</a>
+        </td>
+        <td>89.59%</td>
+        <td class="fail">Fail</td>
+        <td><a href="screenshots/Desktop/diff/_.png" target="_blank"><img src="screenshots/Desktop/diff/_.png" /></a></td>
+      </tr>
+    
+        </tbody>
+      </table>
+      <div id="modal" onclick="closeModal()">
+        <img id="modal-image" src="" />
+      </div>
+      <script>
+        function openModal(src) {
+          const modal = document.getElementById('modal');
+          const modalImg = document.getElementById('modal-image');
+          modalImg.src = src;
+          modal.style.display = 'block';
+        }
+        function closeModal() {
+          document.getElementById('modal').style.display = 'none';
+        }
+      </script>
+    </body>
+    </html>
+  
