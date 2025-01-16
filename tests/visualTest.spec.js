@@ -352,4 +352,80 @@ test.describe("Visual Comparison Tests", () => {
       console.error(chalk.red(`Error waiting for confirmation message: ${error.message}`));
     }
   });  
+
+  test("Verify Online Programs and Getting Started Menus", async ({ page }) => {
+    const verifyMenu = async (menuName, menuSelector) => {
+      console.log(chalk.blue(`Locating the '${menuName}' menu...`));
+      const isMenuVisible = await page.isVisible(menuSelector);
+      if (!isMenuVisible) {
+        throw new Error(`The '${menuName}' menu is not visible.`);
+      }
+      console.log(chalk.green(`${menuName} menu is visible.`));
+  
+      // Get all submenus and links
+      const submenuSelector = `${menuSelector} ul.mega-sub-menu`;
+      const linksSelector = `${submenuSelector} a.mega-menu-link`;
+  
+      console.log(chalk.blue(`Checking for submenus and links in '${menuName}' menu...`));
+      const submenuCount = await page.locator(submenuSelector).count();
+      console.log(chalk.green(`Found ${submenuCount} submenus in '${menuName}' menu.`));
+  
+      const links = await page.locator(linksSelector);
+      const linkCount = await links.count();
+      console.log(chalk.green(`Found ${linkCount} links in '${menuName}' menu.`));
+  
+      // Verify each link
+      let invalidLinks = 0;
+      for (let i = 0; i < linkCount; i++) {
+        const linkText = await links.nth(i).textContent();
+        const linkHref = await links.nth(i).getAttribute("href");
+        console.log(chalk.blue(`Checking link ${i + 1} in '${menuName}' menu: ${linkText}`));
+  
+        if (!linkHref || linkHref.trim() === "") {
+          console.log(
+            chalk.yellow(
+              `Warning: Link '${linkText}' in '${menuName}' menu does not have a valid href attribute.`
+            )
+          );
+          invalidLinks++;
+        } else {
+          console.log(
+            chalk.green(
+              `Link '${linkText}' in '${menuName}' menu is valid with href: ${linkHref}`
+            )
+          );
+        }
+      }
+  
+      console.log(
+        chalk.green(
+          `All checks complete for '${menuName}' menu. Found ${invalidLinks} invalid links.`
+        )
+      );
+  
+      // Log warning instead of failing the test
+      if (invalidLinks > 0) {
+        console.log(
+          chalk.yellow(
+            `Test completed with ${invalidLinks} warnings for invalid links in '${menuName}' menu.`
+          )
+        );
+      } else {
+        console.log(chalk.green(`All links in the '${menuName}' menu are valid.`));
+      }
+    };
+  
+    console.log(chalk.blue("Navigating to the homepage..."));
+  
+    // Navigate to the homepage
+    const homePageUrl = "https://live-web-tamiu.pantheonsite.io/";
+    await page.goto(homePageUrl, { waitUntil: "domcontentloaded" });
+    console.log(chalk.green("Homepage loaded successfully."));
+  
+    // Verify the 'Online Programs' menu
+    await verifyMenu("Online Programs", "#mega-menu-item-313");
+  
+    // Verify the 'Getting Started' menu
+    await verifyMenu("Getting Started", "#mega-menu-item-314");
+  });  
 });
